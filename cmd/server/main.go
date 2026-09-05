@@ -1,9 +1,13 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/talentn/fizzbuzz-server/internal/api"
@@ -24,6 +28,24 @@ func main() {
 		IdleTimeout:  60 * time.Second,
 	}
 
-	log.Printf("server listening on %s", server.Addr)
-	log.Fatal(server.ListenAndServe())
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+
+	go func() {
+		log.Printf("server listening on %s", server.Addr)
+		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("server error: %v", err)
+		}
+	}()
+
+	<-ctx.Done()
+	log.Println("shutting down server...")
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := server.Shutdown(shutdownCtx); err != nil {
+		log.Fatalf("server shutdown error: %v", err)
+	}
+	log.Println("server shutdown complete")
 }
