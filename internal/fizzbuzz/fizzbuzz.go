@@ -1,17 +1,17 @@
 package fizzbuzz
 
 import (
-	"strconv"
-	"fmt"
 	"errors"
+	"fmt"
+	"strconv"
 )
 
 type Params struct {
-	Int1 int
-	Int2 int
-	Limit int
-	Str1 string
-	Str2 string
+	Int1  int    `json:"int1"`
+	Int2  int    `json:"int2"`
+	Limit int    `json:"limit"`
+	Str1  string `json:"str1"`
+	Str2  string `json:"str2"`
 }
 
 const Max = 100_000
@@ -39,10 +39,6 @@ func (p Params) Validate() error {
 
 	return errors.Join(errs...)
 }
-
-
-
-
 
 func Generate(params Params) []string {
 	out := make([]string, params.Limit)

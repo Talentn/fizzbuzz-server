@@ -54,7 +54,7 @@ curl "http://localhost:8080/stats"
 ```
 
 ```json
-{"hits":2,"most_frequent_request":{"Int1":3,"Int2":5,"Limit":15,"Str1":"Fizz","Str2":"Buzz"}}
+{"hits":2,"most_frequent_request":{"int1":3,"int2":5,"limit":15,"str1":"Fizz","str2":"Buzz"}}
 ```
 
 ## Tests
