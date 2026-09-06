@@ -11,6 +11,12 @@ are replaced by `str1`, multiples of `int2` by `str2`, and multiples of both by
 
 ## Run
 
+### With Docker
+```bash
+docker build -t fizzbuzz-server .
+docker run -p 8080:8080 fizzbuzz-server
+```
+
 ```bash
 go run ./cmd/server
 ```
